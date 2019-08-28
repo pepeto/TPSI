@@ -2,6 +2,8 @@
 # from sklearn.model_selection import train_test_split
 # import numpy as np
 
+from ensemble import voting     # Levanta la funcion voting del archivo ensemple.py
+
 from sklearn import datasets                            # https://scikit-learn.org/stable/datasets/index.html
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -96,7 +98,11 @@ y_hat = automl.predict(X_test)
 print("Accuracy score", sklearn.metrics.accuracy_score(y_test, y_hat))
 '''
 
+'''
 tpot = TPOTClassifier(generations=3, population_size=50, verbosity=2)
 tpot.fit(X_train, y_train)
 print(tpot.score(X_train, y_train))
 # tpot.export('tpot_iris_pipeline.py')
+'''
+
+voting(X_train, y_train, X_test, y_test)
