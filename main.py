@@ -3,7 +3,8 @@
 # import numpy as np
 
 from ensemble import voting     # Levanta la funcion voting del archivo ensemple.py
-
+from knn import knn
+import time
 from sklearn import datasets                            # https://scikit-learn.org/stable/datasets/index.html
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -81,15 +82,7 @@ knn_5_scores = cross_val_score(knn_5_clf, X_train, y_train, cv=10)
 print("\n\nknn_3 mean scores: % 5.2f" % knn_3_scores.mean(), "knn_3 std: % 5.2f" % knn_3_scores.std())
 print("knn_5 mean scores: % 5.2f" % knn_5_scores.mean(), " knn_5 std: % 5.2f" % knn_5_scores.std())
 
-# Listar resultados de K entre 3 y 9 para encontrar el mejor.
-results = []
-for N in range(3, 9, 1):                                            # for x=3 to 8 step 1 (por defecto step = 1)
-    knn_clf = KNeighborsClassifier(n_neighbors=N)                   # Crea el clasificador con un N determinado
-    # Mete N (cantidad de vecinos para el cálculo) en results y el promedio del 10 fold cross validation
-    results.append((N, cross_val_score(knn_clf, X_train, y_train, cv=10).mean()))
-# Imprime sorteado en orden descendente (reverse=true) la matriz resultados según columna score (key=lambda x: x[1])
-# Más sobre sorted: https://realpython.com/python-sort/
-print('\n', sorted(results, key=lambda x: x[1], reverse=True))
+knn(X_train, y_train, X_test, y_test)
 
 '''
 automl = autosklearn.classification.AutoSklearnClassifier()
