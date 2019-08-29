@@ -41,7 +41,8 @@ print("Accuracy of SVC on original Test Set: % 5.2f" % accuracy_score(y_test, sv
 
 
 # Insta un objeto "Logistic Regression" y genera el modelo en una sola línea.
-lr_clf = LogisticRegression(multi_class='auto', solver='liblinear', random_state=7).fit(X_train_2, y_train_2)
+lr_clf = LogisticRegression(multi_class='auto', solver='liblinear', random_state=7)
+lr_clf.fit(X_train_2, y_train_2)
 lr_pred = lr_clf.predict(X_test_2)    # Predicción sobre set de test
 # Impresión de resultados
 print("Accuracy of LR (75-25): % 5.2f" % accuracy_score(y_test_2, lr_pred))     # del LR score de real sobre predicho

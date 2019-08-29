@@ -1,0 +1,68 @@
+Tree-based Pipeline Optimization Tool (TPOT)
+
+TPOT is a wrapper for the Python machine learning package, scikitlearn.
+Thus, each machine learning pipeline operator (i.e., GP primitive) in TPOT corresponds
+to a machine learning algorithm, such as a supervised classification model or standard
+feature scaler. All implementations of the machine learning algorithms listed below are
+from scikit-learn (except XGBoost), and we refer to the scikit-learn documentation and
+for detailed explanations of the machine learning algorithms used in TPOT.
+
+Supervised Classification Operators. DecisionTree, RandomForest, eXtreme Gradient Boosting
+Classifier (from XGBoost), LogisticRegression, and KNearestNeighborClassifier.
+Classification operators store the classifier's predictions as a new feature as well as
+the classification for the pipeline.
+
+Feature Preprocessing Operators. StandardScaler, RobustScaler, Min-MaxScaler, MaxAbsScaler,
+RandomizedPCA [12], Binarizer, and PolynomialFeatures. Preprocessing operators modify the
+dataset in some way and return the modified dataset.
+
+Feature Selection Operators. VarianceThreshold, SelectKBest, Select-Percentile, SelectFwe,
+and Recursive Feature Elimination (RFE). Feature selection operators reduce the number of
+features in the dataset using some criteria and return the modified dataset.
+
+We also include an operator that combines disparate datasets, as demonstrated in Figure 8.1,
+which allows multiple modified variants of the dataset to be combined into a single dataset.
+Additionally, TPOT v0.3 does not include missing value imputation operators, and therefore
+does not support datasets with missing data. Lastly, we provide integer and oat terminals to
+parameterize the various operators, such as the number of neighbors k in the k-Nearest 
+Neighbors Classifier.
+
+Constructing Tree-Based Pipelines
+To combine these operators into a machine learning pipeline, we treat them as GP primitives
+and construct GP trees from them. Figure 8.1 shows an example tree-based pipeline, where
+two copies of the dataset are provided to the pipeline, modified in a successive manner
+by each operator, combined into a single dataset, and finally used to make classifications.
+Other than the restriction that every pipeline must have a classifier as its final operator,
+it is possible to construct arbitrarily shaped machine learning pipelines that can act on
+multiple copies of the dataset. Thus, GP trees provide an inherently flexible representation
+of machine learning pipelines.
+In order for these tree-based pipelines to operate, we store three additional variables for
+each record in the dataset. The \class" variable indicates the true label for each record,
+and is used when evaluating the accuracy of each pipeline.
+The \guess" variable indicates the pipeline's latest guess for each record, where the
+predictions from the final classification operator in the pipeline are stored as the
+\guess". Finally, the \group" variable indicates whether the record is to be used as
+a part of the internal training or testing set, such that the tree-based pipelines are
+only trained on the training data and evaluated on the testing data. We note that the
+dataset provided to TPOT as training data is further split into an internal stratified
+75%/25% training/testing set.
+
+Optimizing Tree-Based Pipelines
+To automatically generate and optimize these tree-based pipelines, we use a genetic
+programming (GP) algorithm as implemented in the Python package DEAP. The TPOT GP
+algorithm follows a standard GP process: To begin, the GP algorithm generates 100
+random tree-based pipelines and evaluates their balanced cross-validation accuracy
+on the dataset. For every generation of the GP algorithm, the algorithm selects the
+top 20 pipelines in the population according to the NSGA-II selection scheme, where
+pipelines are selected to simultaneously maximize classification accuracy on the
+dataset while minimizing the number of operators in the pipeline. Each of the top 20
+selected pipelines produce five copies (i.e., offspring) into the next generation's
+population, 5% of those offspring cross over with another ospring using one-point
+crossover, then 90% of the remaining unaffected offspring are randomly changed by a point,
+insert, or shrink mutation (1/3 chance of each). Every generation, the algorithm
+updates a Pareto front of the non-dominated solutions discovered at any point in the
+GP run. The algorithm repeats this evaluate-select-crossovermutate process for 100
+generations|adding and tuning pipeline operators that improve classification accuracy
+and pruning operators that degrade classification accuracy|at which point the algorithm
+selects the highest-accuracy pipeline from the Pareto front as the representative \best"
+pipeline from the run.
