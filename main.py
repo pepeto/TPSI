@@ -61,16 +61,9 @@ print("Standard Deviation of LR scores: % 5.2f" % lr_scores.std())
 X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=0)
 
 svc_scores = cross_val_score(svc_clf, X_train, y_train, cv=4)   # Se corre nuevamente el 4 fold cross val
-print("\nAverage SVC scores (stratified): % 5.2f" % svc_scores.mean())
+print("\nAverage SVC scores (stratified): % 5.2f" % cross_val_score(svc_clf, X_train, y_train, cv=4).mean())
 print("Standard Deviation of SVC scores: % 5.2f" % svc_scores.std())
 print("Score on Final Test Set (stratified): % 5.2f" % accuracy_score(y_test, svc_clf.predict(X_test)))
-
-'''
-The preceding code is equivalent to:
-from sklearn.model_selection import cross_val_score, StratifiedKFold
-skf = StratifiedKFold(n_splits = 4)
-svc_scores = cross_val_score(svc_clf, X_train, y_train, cv = skf)
-'''
 
 # KNN de 3 y 5 con 10 fold cross-validation
 # con estratificación ya generada líneas atrás
@@ -82,20 +75,21 @@ knn_5_scores = cross_val_score(knn_5_clf, X_train, y_train, cv=10)
 print("\n\nknn_3 mean scores: % 5.2f" % knn_3_scores.mean(), "knn_3 std: % 5.2f" % knn_3_scores.std())
 print("knn_5 mean scores: % 5.2f" % knn_5_scores.mean(), " knn_5 std: % 5.2f" % knn_5_scores.std())
 
+# ----------------------------- Predictors ------------------------------
 knn(X_train, y_train, X_test, y_test)
 
-'''
+voting(X_train, y_train, X_test, y_test)
+
+''' --------------------------- AutoML ----------------------------------
 automl = autosklearn.classification.AutoSklearnClassifier()
 automl.fit(X_train, y_train)
 y_hat = automl.predict(X_test)
 print("Accuracy score", sklearn.metrics.accuracy_score(y_test, y_hat))
 '''
-
-'''
-tpot = TPOTClassifier(generations=3, population_size=50, verbosity=2)
+# ------------------------------- TPOT -----------------------------------
+start_time = time.time()
+tpot = TPOTClassifier(generations=10, population_size=50, verbosity=2)
 tpot.fit(X_train, y_train)
 print(tpot.score(X_train, y_train))
-# tpot.export('tpot_iris_pipeline.py')
-'''
-
-voting(X_train, y_train, X_test, y_test)
+print("\n* * Elapsed time for TPOT: % 5.2f" % (time.time()-start_time), "segundos\n")
+tpot.export('tpot_pipeline.py') # Exporta resultado a un archivo .py

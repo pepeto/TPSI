@@ -17,6 +17,7 @@ from sklearn.metrics import accuracy_score
 
 import time
 
+
 def voting(X_train, y_train, X_test, y_test):
     start_time = time.time()
     # Instancian cada uno de los clasificadores/estimadores con sus respectivos hiper parámetros
