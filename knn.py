@@ -26,10 +26,8 @@ def knn(X_train, y_train, X_test, y_test):
     grid_search.fit(X_train, y_train)
 
     print("BEST Estimator: ", grid_search.best_estimator_, "\nScore:  ", grid_search.best_score_,
-          " Params: ", grid_search.best_params_,"\n",
+          " Params: ", grid_search.best_params_, "\n",
           "* Elapsed time for KNN: % 5.2f" % (time.time()-start_time))
-
-    start_time = time.time()
 
     # Plot
     plt.scatter(range(3, int(len(X_train) / 2)), grid_search.cv_results_["mean_test_score"], c=("blue"), alpha=0.5)
@@ -37,8 +35,23 @@ def knn(X_train, y_train, X_test, y_test):
     plt.xlabel('N')
     plt.ylabel('Accuracy')
     plt.show()
+# --------------------------------------------------------------------------------------
+
+    g1 = X_train[grid_search.predict(X_train) == 0]
+    g2 = X_train[grid_search.predict(X_train) == 1]
+    g3 = X_train[grid_search.predict(X_train) == 2]
+
+    plt.scatter(g1[:, 0], g1[:, 1], c=("red"), alpha=0.5)
+    plt.scatter(g2[:, 0], g2[:, 1], c=("blue"), alpha=0.5)
+    plt.scatter(g3[:, 0], g3[:, 1], c=("green"), alpha=0.5)
+    plt.title('Accuracy vs. N')
+    plt.xlabel('N')
+    plt.ylabel('Accuracy')
+    plt.show()
+
 
     '''
+    start_time = time.time()
     results = []
 
     for N in range(3, int(len(X_train)/2), 1): # for N=3 to 8 step 1 (por defecto step = 1)
