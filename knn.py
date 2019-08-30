@@ -29,7 +29,6 @@ def knn(X_train, y_train, X_test, y_test):
           " Params: ", grid_search.best_params_,"\n",
           "* Elapsed time for KNN: % 5.2f" % (time.time()-start_time))
 
-
     start_time = time.time()
 
     # Plot
@@ -39,6 +38,7 @@ def knn(X_train, y_train, X_test, y_test):
     plt.ylabel('Accuracy')
     plt.show()
 
+    '''
     results = []
 
     for N in range(3, int(len(X_train)/2), 1): # for N=3 to 8 step 1 (por defecto step = 1)
@@ -52,6 +52,7 @@ def knn(X_train, y_train, X_test, y_test):
     # Más sobre sorted: https://realpython.com/python-sort/
     print("\n", sorted(results, key=lambda x: x[1], reverse=True),
           "\n* * Elapsed time for KNN: % 5.2f" % (time.time()-start_time), "segundos\n")
+    '''
 
 ''' Otra manera de ver los resultados iterando sobre un zip de vectores 
     cvres = grid_search.cv_results_
