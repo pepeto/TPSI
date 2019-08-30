@@ -7,11 +7,9 @@ from knn import knn
 import time
 from sklearn import datasets                            # https://scikit-learn.org/stable/datasets/index.html
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-# load the classifying models
-from sklearn.linear_model import LogisticRegression
+from LR import LR
+from SVC import SVC1
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score
 from tpot import TPOTClassifier
 
@@ -21,50 +19,17 @@ X = iris.data[:, :2]            # Pone en X todos los elementos (:) de las colum
 y = iris.target                 # Pone en y la columna target (es convención poner el vector clase en minúscula
 
 
-# Hace un split del set 75% - training 25% - test sin estratificación.
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=7)
-
-# split the training en 75% training - 25% validation sin estratificación.
-X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(X_train, y_train, test_size=0.25, random_state=7)
-
-# Instancia objeto "Support Vector Classifier" con kernel linear y seed random=7 (para shuffle de data)
-# Más sobre Kernels: https://www.youtube.com/watch?v=OmTu0fqUsQk
-# https://chrisalbon.com/machine_learning/support_vector_machines/svc_parameters_using_rbf_kernel/
-svc_clf = SVC(kernel='linear', random_state=7)  # kernel ‘linear’, ‘poly’, ‘rbf’ (default), ‘sigmoid’, ‘precomputed’
-svc_clf.fit(X_train_2, y_train_2)               # Genera el modelo sobre los datos de training
-svc_pred = svc_clf.predict(X_test_2)            # Predicción sobre set de test
-
-# Impresión de resultados % 5.2f" % formatea el float en 5 posiciones entero y dos decimales.
-print("Accuracy of SVC (75-25): % 5.2f" % (accuracy_score(y_test_2, svc_pred)))   # del SVC score de real sobre predicho
-# Accuracy calculado sobre los datos originales.
-print("Accuracy of SVC on original Test Set: % 5.2f" % accuracy_score(y_test, svc_clf.predict(X_test)))
-
-
-# Insta un objeto "Logistic Regression" y genera el modelo en una sola línea.
-lr_clf = LogisticRegression(multi_class='auto', solver='liblinear', random_state=7)
-lr_clf.fit(X_train_2, y_train_2)
-lr_pred = lr_clf.predict(X_test_2)    # Predicción sobre set de test
-# Impresión de resultados
-print("Accuracy of LR (75-25): % 5.2f" % accuracy_score(y_test_2, lr_pred))     # del LR score de real sobre predicho
-
-
-# Cross Validation - se le pasa el clasificador instanciado, el set de datos y el número de pedazos (4)
-svc_scores = cross_val_score(svc_clf, X_train, y_train, cv=4)
-
-print("\nAverage SVC scores (4 fold): % 5.2f" % svc_scores.mean())     # imprime el promedio de las 4 corridas
-print("Standard Deviation of SVC scores: % 5.2f" % svc_scores.std())   # desviación estándar
-
-lr_scores = cross_val_score(lr_clf, X_train, y_train, cv=4)     # lo mismo pero con Logistic Regression
-print("\nAverage LR scores (4 fold): % 5.2f" % lr_scores.mean())
-print("Standard Deviation of LR scores: % 5.2f" % lr_scores.std())
-
 # Stratify - se hace el mismo split pero especificando stratify=y
 X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=0)
 
-svc_scores = cross_val_score(svc_clf, X_train, y_train, cv=4)   # Se corre nuevamente el 4 fold cross val
-print("\nAverage SVC scores (stratified): % 5.2f" % cross_val_score(svc_clf, X_train, y_train, cv=4).mean())
-print("Standard Deviation of SVC scores: % 5.2f" % svc_scores.std())
-print("Score on Final Test Set (stratified): % 5.2f" % accuracy_score(y_test, svc_clf.predict(X_test)))
+
+# Hace un split del set 75% - training 25% - test sin estratificación.
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=7)
+
+# split the training en 75% training - 25% validation sin estratificación.
+# X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(X_train, y_train, test_size=0.25, random_state=7)
+
+# ----------------------------------------------------------------------------------------------------------------
 
 # KNN de 3 y 5 con 10 fold cross-validation
 # con estratificación ya generada líneas atrás
@@ -77,6 +42,10 @@ print("\n\nknn_3 mean scores: % 5.2f" % knn_3_scores.mean(), "knn_3 std: % 5.2f"
 print("knn_5 mean scores: % 5.2f" % knn_5_scores.mean(), " knn_5 std: % 5.2f" % knn_5_scores.std())
 
 # ----------------------------- Predictors ------------------------------
+LR(X_train, y_train, X_test, y_test)
+
+SVC1(X_train, y_train, X_test, y_test)
+
 knn(X_train, y_train, X_test, y_test)
 
 voting(X_train, y_train, X_test, y_test)
@@ -89,7 +58,7 @@ print("Accuracy score", sklearn.metrics.accuracy_score(y_test, y_hat))
 '''
 # ------------------------------- TPOT -----------------------------------
 start_time = time.time()
-tpot = TPOTClassifier(generations=10, population_size=50, verbosity=2)
+tpot = TPOTClassifier(generations=3, population_size=30, verbosity=2)
 tpot.fit(X_train, y_train)
 print(tpot.score(X_train, y_train))
 print("\n* * Elapsed time for TPOT: % 5.2f" % (time.time()-start_time), "segundos\n")
