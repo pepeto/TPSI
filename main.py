@@ -15,7 +15,7 @@ from tpot import TPOTClassifier
 
 iris = datasets.load_iris()     # Levanta el dataset iris que está incluido en el sklearn
 print(iris.feature_names)       # 'sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'
-X = iris.data[:, :2]            # Pone en X todos los elementos (:) de las columnas 0 y 1 (:2)
+X = iris.data[:, :2]            # Pone en X todos los elementos (:) solo de las columnas 0 y 1 (:2)
 y = iris.target                 # Pone en y la columna target (es convención poner el vector clase en minúscula
 
 
