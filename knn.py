@@ -44,9 +44,9 @@ def knn(X_train, y_train, X_test, y_test):
     plt.scatter(g1[:, 0], g1[:, 1], c=("red"), alpha=0.5)
     plt.scatter(g2[:, 0], g2[:, 1], c=("blue"), alpha=0.5)
     plt.scatter(g3[:, 0], g3[:, 1], c=("green"), alpha=0.5)
-    plt.title('Accuracy vs. N')
-    plt.xlabel('N')
-    plt.ylabel('Accuracy')
+    plt.title('Grupos')
+    plt.xlabel('Atributo 1')
+    plt.ylabel('Atributo 2')
     plt.show()
 
 
