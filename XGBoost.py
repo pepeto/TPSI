@@ -1,4 +1,50 @@
+import xgboost as XGB
+import time
+from sklearn.model_selection import GridSearchCV
+
+
+def XGBC(X_train, y_train):
+    start_time = time.time()
+
+    # param_grid = [{'n_neighbors': range(3, int(len(X_train) / 2))}]
+
+    params = {
+        'silent': [False],
+        'scale_pos_weight': [1],
+        'learning_rate': [0.03],    # 0.01 a 0.1
+        'colsample_bytree': [0.2],
+        'subsample': [0.6, 0.7],
+        'objective': ['binary:logistic'],
+        'n_estimators': [1000],
+        'reg_alpha': [0.3],
+        'max_depth': [2, 3],    # empezar con 3
+        'gamma': [1],
+        'n_jobs': [6],   #max number of cores (8)
+        'predictor': ['gpu_predictor']
+        }
+        #,'tree_method': ['gpu_hist']}
+
+    # grid_search recibe: clasificador, parámetros a variar, crossVal, scoring
+    grid_search = GridSearchCV(XGB.XGBClassifier(), params, cv=3, iid=False)  # scoring='neg_mean_squared_error'
+    grid_search.fit(X_train, y_train)
+
+    print("XGBoost ***********\n", grid_search.best_estimator_, "\n     Score XGB: ", grid_search.best_score_, "\n",
+          "     Params XGB: ", grid_search.best_params_, "\n",
+          "     Elapsed time for XGB: % 5.2f" % (time.time() - start_time))
+
+
+
 ''''
+Score:   0.7762987012987013  
+Params:  {'colsample_bytree': 0.3, 'gamma': 1, 'learning_rate': 0.02, 'max_depth': 3, 
+'n_estimators': 1000, 'n_jobs': 4, 'objective': 'binary:logistic', 'reg_alpha': 0.3, 'scale_pos_weight': 1, 
+'silent': False, 'subsample': 0.8} 
+
+Score XGB:  0.792965367965367  152s
+Params XGB:  {'colsample_bytree': 0.2, 'gamma': 1, 'learning_rate': 0.03, 'max_depth': 2, 
+'n_estimators': 1200, 'n_jobs': 4, 'objective': 'binary:logistic', 'reg_alpha': 0.3, 'scale_pos_weight': 1, 
+'silent': False, 'subsample': 0.7}
+
 Fill reasonable values for key inputs:
 learning_rate: 0.01
 n_estimators: 100 if the size of your data is high, 1000 is if it is medium-low

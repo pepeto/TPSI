@@ -1,3 +1,4 @@
+from XGBoost import XGBC
 from ensemble import voting     # Levanta la funcion voting del archivo ensemple.py
 from knn import knn
 import time
@@ -5,7 +6,9 @@ from sklearn import datasets                            # https://scikit-learn.o
 from sklearn.model_selection import train_test_split
 from LR import LR
 from SVC import SVC1
+from SVC2 import SVC2
 from tpot import TPOTClassifier
+
 
 iris = datasets.load_iris()     # Levanta el dataset iris que está incluido en el sklearn
 print(iris.feature_names)       # 'sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'
@@ -26,16 +29,20 @@ LR(X_train, y_train, X_test, y_test)
 
 SVC1(X_train, y_train, X_test, y_test)
 
+SVC2(X_train, y_train, X_test, y_test)
+
 knn(X_train, y_train, X_test, y_test)
+
+XGBC(X_train, y_train)
 
 voting(X_train, y_train, X_test, y_test)
 
-tm = (time.time() - start_time)    # Le damos al TPOT tm minutes máximo para correr y resultados commparables
-print("\n* * Elapsed TOTAL time for TPOT: % 5.2f" % tm, "minutes\n")
+tm = (time.time() - start_time)/60    # Le damos al TPOT tm minutes máximo para correr y resultados comparables
+print("\nTOTAL time for TPOT: % 5.2f" % tm, "min.\n")
 
 # ------------------------------- TPOT -----------------------------------
 start_time = time.time()
-tpot = TPOTClassifier(max_time_mins=1, generations=3, population_size=30, verbosity=2) # poner tm
+tpot = TPOTClassifier(max_time_mins=tm, generations=100, population_size=50, verbosity=2) # poner tm
 tpot.fit(X_train, y_train)
 print(tpot.score(X_train, y_train))
 print("\n* * Elapsed time for TPOT: % 5.2f" % (time.time()-start_time), "segundos\n")

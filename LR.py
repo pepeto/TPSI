@@ -1,3 +1,4 @@
+import time
 from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
@@ -6,14 +7,12 @@ def LR(X_train, y_train, X_test, y_test):
 
     # Insta un objeto "Logistic Regression" y genera el modelo en una sola línea.
     lr_clf = LogisticRegression(multi_class='auto', solver='liblinear', random_state=7)
-    lr_clf.fit(X_train, y_train)
-    lr_pred = lr_clf.predict(X_test)    # Predicción sobre set de test
-    # Impresión de resultados
-    print("Accuracy of LR (75-25): % 5.2f" % accuracy_score(y_test, lr_pred))     # del LR score de real sobre predicho
+
+    start_time = time.time()
 
     lr_scores = cross_val_score(lr_clf, X_train, y_train, cv=4)  # con Cross Validation
-    print("\nAverage LR scores (4 fold): % 5.2f" % lr_scores.mean())
-    print("Standard Deviation of LR scores: % 5.2f" % lr_scores.std())
+    print("\nLR (4 fold) Std Dev: %5.2f - Mean Acc: %5.2f - Elap: %5.2f" %
+          (lr_scores.std(), lr_scores.mean(), (time.time() - start_time)))
 
 '''
 class sklearn.linear_model.LogisticRegression(penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, 

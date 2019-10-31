@@ -9,23 +9,15 @@ def SVC1(X_train, y_train, X_test, y_test):
     # Más sobre Kernels: https://www.youtube.com/watch?v=OmTu0fqUsQk
     # https://chrisalbon.com/machine_learning/support_vector_machines/svc_parameters_using_rbf_kernel/
     svc_clf = SVC(kernel='linear', random_state=7)  # kernel ‘linear’, ‘poly’, ‘rbf’ (default), ‘sigmoid’, ‘precomputed’
-    svc_clf.fit(X_train, y_train)               # Genera el modelo sobre los datos de training
-    svc_pred = svc_clf.predict(X_test)            # Predicción sobre set de test
-
-    # Impresión de resultados % 5.2f" % formatea el float en 5 posiciones entero y dos decimales.
-    print("Accuracy of SVC (75-25): % 5.2f" % (accuracy_score(y_test, svc_pred))) # del SVC score de real sobre predicho
-    # Accuracy calculado sobre los datos originales.
-    print("Accuracy of SVC on original Test Set: % 5.2f" % accuracy_score(y_test, svc_clf.predict(X_test)))
 
     start_time = time.time()
 
     # Cross Validation - se le pasa el clasificador instanciado, el set de datos y el número de pedazos (4)
     svc_scores = cross_val_score(svc_clf, X_train, y_train, cv=4)
 
-    print("\nAverage SVC scores (4 fold): % 5.2f" % svc_scores.mean())  # imprime el promedio de las 4 corridas
-    print("Standard Deviation of SVC scores: % 5.2f" % svc_scores.std())  # desviación estándar
-
-    print("\n* * Elapsed time for Ensemble: % 5.2f" % (time.time() - start_time), "segundos\n")
+    # imprime el promedio de las 4 corridas
+    print("\nSVC (4 fold) Std Dev: %5.2f - Mean Acc: %5.2f - Elap: %5.2f seg\n" %
+          (svc_scores.std(), svc_scores.mean(), (time.time() - start_time)))
 
 '''
 class sklearn.svm.LinearSVC(penalty=’l2’, loss=’squared_hinge’, dual=True, tol=0.0001, C=1.0, multi_class=’ovr’, 

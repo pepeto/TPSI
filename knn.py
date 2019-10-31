@@ -22,7 +22,7 @@ def knn(X_train, y_train, X_test, y_test):
     param_grid = [{'n_neighbors': range(3, int(len(X_train)/2))}]
 
     # grid_search recibe: clasificador, parametros a variar, crossVal, scoring
-    grid_search = GridSearchCV(KNeighborsClassifier(), param_grid, cv=10, iid=False) # scoring='neg_mean_squared_error',
+    grid_search = GridSearchCV(KNeighborsClassifier(), param_grid, cv=10, iid=False) # scoring='neg_mean_squared_error'
     grid_search.fit(X_train, y_train)
 
     print("BEST Estimator: ", grid_search.best_estimator_, "\nScore:  ", grid_search.best_score_,

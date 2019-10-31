@@ -44,7 +44,7 @@ def objective_func(args):
         learning_rate = args['param']['learning_rate']
         gammax = args['param']['gammax']
         colsample_bytree = args['param']['colsample_bytree']
-        clf = XGB.XGBRegressor(n_estimators=n_estimators, max_depth=max_depth,
+        clf = XGB.XGBClassifier(n_estimators=n_estimators, max_depth=max_depth,
                                min_child_weight=min_child_weight, subsample=subsample,
                                learning_rate=learning_rate, gamma=gammax,
                                colsample_bytree=colsample_bytree,
