@@ -9,13 +9,31 @@ from SVC import SVC1
 from SVC2 import SVC2
 from tpot import TPOTClassifier
 
+#DATASET DE IRIS
+#iris = datasets.load_iris()     # Levanta el dataset iris que está incluido en el sklearn
+#print(iris.feature_names)       # 'sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'
+#X = iris.data[:, :2]            # Pone en X todos los elementos (:) solo de las columnas 0 y 1 (:2)
+#y = iris.target                 # Pone en y la columna target (es convención poner el vector clase en minúscula
 
-iris = datasets.load_iris()     # Levanta el dataset iris que está incluido en el sklearn
-print(iris.feature_names)       # 'sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'
-X = iris.data[:, :2]            # Pone en X todos los elementos (:) solo de las columnas 0 y 1 (:2)
-y = iris.target                 # Pone en y la columna target (es convención poner el vector clase en minúscula
+#DATASET DE WINE
+#wine = datasets.load_wine()
+#print(wine.feature_names)
+#X = wine.data[:, :2]
+#y = wine.target
 
-# Parte el set original en train y test con Stratify, shuffle por defecto
+#DATASET DE BREASTCANCER
+#breastcancer = datasets.load_breast_cancer()
+#print(breastcancer.feature_names)
+#X = breastcancer.data[:, :2]
+#y = breastcancer.target
+
+#DATASET DE DIGITS
+#digits = datasets.load_digits()
+#print(digits.feature_names)
+#X = digits.data[:, :2]
+#y = digits.target
+
+# Parte el set original en train y test con Stratify, shuffle por defectot
 # parametros doc en https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
 X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y,  random_state=0)
 
@@ -34,8 +52,6 @@ SVC2(X_train, y_train, X_test, y_test)
 knn(X_train, y_train, X_test, y_test)
 
 XGBC(X_train, y_train)
-
-voting(X_train, y_train, X_test, y_test)
 
 tm = (time.time() - start_time)/60    # Le damos al TPOT tm minutes máximo para correr y resultados comparables
 print("\nTOTAL time for TPOT: % 5.2f" % tm, "min.\n")
