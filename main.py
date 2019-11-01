@@ -10,27 +10,27 @@ from SVC2 import SVC2
 from tpot import TPOTClassifier
 
 #DATASET DE IRIS
-#iris = datasets.load_iris()     # Levanta el dataset iris que está incluido en el sklearn
-#print(iris.feature_names)       # 'sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'
-#X = iris.data[:, :2]            # Pone en X todos los elementos (:) solo de las columnas 0 y 1 (:2)
-#y = iris.target                 # Pone en y la columna target (es convención poner el vector clase en minúscula
+iris = datasets.load_iris()     # Levanta el dataset iris que está incluido en el sklearn
+print(iris.feature_names)       # 'sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'
+X = iris.data           # Pone en X todos los elementos (:) solo de las columnas 0 y 1 (:2)
+y = iris.target                 # Pone en y la columna target (es convención poner el vector clase en minúscula
 
 #DATASET DE WINE
 #wine = datasets.load_wine()
 #print(wine.feature_names)
-#X = wine.data[:, :2]
+#X = wine.data
 #y = wine.target
 
 #DATASET DE BREASTCANCER
 #breastcancer = datasets.load_breast_cancer()
 #print(breastcancer.feature_names)
-#X = breastcancer.data[:, :2]
+#X = breastcancer.data
 #y = breastcancer.target
 
 #DATASET DE DIGITS
 #digits = datasets.load_digits()
 #print(digits.feature_names)
-#X = digits.data[:, :2]
+#X = digits.data
 #y = digits.target
 
 # Parte el set original en train y test con Stratify, shuffle por defectot
